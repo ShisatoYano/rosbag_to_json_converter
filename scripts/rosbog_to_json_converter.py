@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import sys
+import rosbag
 import rospy
 import argparse
 from PyQt5 import QtGui, QtWidgets
@@ -45,6 +46,18 @@ def _select_bag_files():
     return files_list
 
 
+def _get_topics_list(files_list):
+    bag = rosbag.Bag(files_list[0])
+    topics_list = list(bag.get_type_and_topic_info()[1].keys())
+
+    if not topics_list:
+        print("Error: Any topics not found")
+        sys.exit()
+    
+    print(topics_list)
+    return topics_list
+
+
 def main():
     print("rosbag_to_json_converter start")
 
@@ -55,6 +68,8 @@ def main():
     app = _construct_qapplication()
 
     files_list = _select_bag_files()
+
+    topics_list = _get_topics_list(files_list)
 
 
 if __name__ == "__main__":
