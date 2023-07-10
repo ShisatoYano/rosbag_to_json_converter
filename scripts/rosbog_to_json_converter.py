@@ -3,7 +3,7 @@ import sys
 import rosbag
 import rospy
 import argparse
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 def _init_ros_node():
@@ -58,6 +58,16 @@ def _get_topics_list(files_list):
     return topics_list
 
 
+def _select_topics(app, topics_list):
+    window = QtWidgets.QWidget()
+
+    scroll_area = QtWidgets.QScrollArea()
+    scroll_area.setWidgetResizable(True)
+    scroll_area_widget_contents = QtWidgets.QWidget(scroll_area)
+    scroll_area_widget_contents.setGeometry(QtCore.QRect(0, 0, 380, 247))
+    
+
+
 def main():
     print("rosbag_to_json_converter start")
 
@@ -70,6 +80,8 @@ def main():
     files_list = _select_bag_files()
 
     topics_list = _get_topics_list(files_list)
+
+    _select_topics(app, topics_list)
 
 
 if __name__ == "__main__":
