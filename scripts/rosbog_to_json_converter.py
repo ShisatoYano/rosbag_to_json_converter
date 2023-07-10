@@ -3,7 +3,11 @@ import rospy
 import argparse
 
 
-def define_command_options():
+def _init_ros_node():
+    rospy.init_node("rosbag_to_json_converter", anonymous=True)
+
+
+def _define_command_options():
     parser = argparse.ArgumentParser(usage="%(prog)s [options]")
     
     parser.add_argument("-a", "--all", dest="all_topics", action="store_true",
@@ -21,9 +25,9 @@ def define_command_options():
 def main():
     print("rosbag_to_json_converter start")
 
-    rospy.init_node("rosbag_to_json_converter", anonymous=True)
+    _init_ros_node()
 
-    args = define_command_options()
+    args = _define_command_options()
 
     print(args)
 
