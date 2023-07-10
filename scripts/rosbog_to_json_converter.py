@@ -1,6 +1,8 @@
 #!/usr/bin/python
+import sys
 import rospy
 import argparse
+from PyQt5 import QtGui, QtWidgets
 
 
 def _init_ros_node():
@@ -22,6 +24,27 @@ def _define_command_options():
     return parser.parse_args()
 
 
+def _construct_qapplication():
+    return QtWidgets.QApplication(sys.argv)
+
+
+def _select_bag_files():
+    files = QtWidgets.QFileDialog.getOpenFileNames(caption="Select bag files",
+                                                        filter="*.bag")
+
+    files_list = []
+    for file in files:
+        if type(file) is list:
+            for f in file: files_list.append(str(f))
+    
+    if not files_list:
+        print("Error: Please select a bag file")
+        sys.exit()
+    
+    print(files_list)
+    return files_list
+
+
 def main():
     print("rosbag_to_json_converter start")
 
@@ -29,7 +52,9 @@ def main():
 
     args = _define_command_options()
 
-    print(args)
+    app = _construct_qapplication()
+
+    files_list = _select_bag_files()
 
 
 if __name__ == "__main__":
