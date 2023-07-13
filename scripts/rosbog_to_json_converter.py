@@ -109,9 +109,22 @@ def _get_selected_topics(selected_or_not, args):
         sys.exit()
 
 
-def main():
-    print("rosbag_to_json_converter start")
+def _output_json_files(files_list, args):
+    args.output_file_name = "%t.json"
 
+    print("Converting...")
+
+    for file in files_list:
+        print(file)
+    
+    QtWidgets.QMessageBox.information(
+        QtWidgets.QWidget(), 
+        "Message",
+        "Finished conversion!!"
+        )
+
+
+def main():
     _init_ros_node()
 
     args = _define_command_options()
@@ -126,7 +139,7 @@ def main():
 
     _get_selected_topics(selected_or_not, args)
 
-    
+    _output_json_files(files_list, args)
 
 
 if __name__ == "__main__":
