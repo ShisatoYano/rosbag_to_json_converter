@@ -93,6 +93,12 @@ def _select_topics(app, topics_list):
     window.show()
     app.exec_()
 
+    selected_or_not = {}
+    for (check_box, topic) in zip(check_boxes, topics_list):
+        selected_or_not[topic] = check_box.isChecked()
+    
+    return selected_or_not
+
 
 def main():
     print("rosbag_to_json_converter start")
@@ -107,7 +113,7 @@ def main():
 
     topics_list = _get_topics_list(files_list)
 
-    _select_topics(app, topics_list)
+    selected_or_not = _select_topics(app, topics_list)
 
 
 if __name__ == "__main__":
