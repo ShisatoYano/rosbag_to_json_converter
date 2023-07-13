@@ -109,13 +109,33 @@ def _get_selected_topics(selected_or_not, args):
         sys.exit()
 
 
+def _convert_bag_to_json(file, args):
+    # load bag file
+    try:
+        bag = rosbag.Bag(file)
+    except Exception as e:
+        rospy.logfatal("Failed to load bag file: %s", e)
+        exit(1)
+    finally:
+        rospy.loginfo("Loaded bag file: %s", file)
+    
+    # read messages
+    try:
+        for topic, msg, unix_time in bag.read_messages(topics=args.topic_names):
+            print(topic)
+    except Exception as e:
+        rospy.logwarn("Failed to read messages: %s", e)
+    finally:
+        bag.close()
+
+
 def _output_json_files(files_list, args):
-    args.output_file_name = "%t.json"
+    args.output_file_format = "%t.json"
 
     print("Converting...")
 
     for file in files_list:
-        print(file)
+        _convert_bag_to_json(file, args)
     
     QtWidgets.QMessageBox.information(
         QtWidgets.QWidget(), 
