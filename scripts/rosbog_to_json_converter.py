@@ -4,6 +4,7 @@ import rosbag
 import rospy
 import argparse
 from PyQt5 import QtCore, QtGui, QtWidgets
+from datetime import datetime
 
 
 def _init_ros_node():
@@ -109,6 +110,17 @@ def _get_selected_topics(selected_or_not, args):
         sys.exit()
 
 
+def _interpret_msg(msg, time, data_dict, parent_data_name=""):
+    try:
+        for s in type(msg).__slots__:
+            val = msg.__getattribute__(s)
+            if not parent_data_name: data_name = s
+            else: data_name = ".".join([parent_data_name, s])
+            _interpret_msg(val, time, data_dict, data_name)
+    except BaseException:
+        print(time, parent_data_name, msg)
+
+
 def _convert_bag_to_json(file, args):
     # load bag file
     try:
@@ -120,12 +132,20 @@ def _convert_bag_to_json(file, args):
         rospy.loginfo("Loaded bag file: %s", file)
     
     # read messages
+    data_dict = {}
     try:
-        for topic, msg, unix_time in bag.read_messages(topics=args.topic_names):
+        for topic, msg, ros_time in bag.read_messages(topics=args.topic_names):
             print(topic)
+
+            if not topic in data_dict: data_dict.setdefault(topic, {})
+
+            unix_time = ros_time.to_time()
+
+            _interpret_msg(msg, unix_time, data_dict)
     except Exception as e:
         rospy.logwarn("Failed to read messages: %s", e)
     finally:
+        print(data_dict)
         bag.close()
 
 
