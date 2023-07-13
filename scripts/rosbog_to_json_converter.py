@@ -15,7 +15,7 @@ def _define_command_options():
     
     parser.add_argument("-a", "--all", dest="all_topics", action="store_true",
                         help="convert all topics", default=False)
-    parser.add_argument("-t", "--topic", dest="topic_name", action="append",
+    parser.add_argument("-t", "--topic", dest="topic_names", action="append",
                         help="list of topic names", metavar="TOPIC_NAME")
     parser.add_argument("-s", "--start-time", dest="start_time", type=float,
                         help="start time you want to convert")
@@ -100,6 +100,17 @@ def _select_topics(app, topics_list):
     return selected_or_not
 
 
+def _get_selected_topics(selected_or_not, args):
+    args.topic_names = []
+
+    for topic_name, is_checked in selected_or_not.items():
+        if is_checked: args.topic_names.append(topic_name)
+    
+    if not args.topic_names:
+        print("Error: Please select topics")
+        sys.exit()
+
+
 def main():
     print("rosbag_to_json_converter start")
 
@@ -114,6 +125,10 @@ def main():
     topics_list = _get_topics_list(files_list)
 
     selected_or_not = _select_topics(app, topics_list)
+
+    _get_selected_topics(selected_or_not, args)
+
+    
 
 
 if __name__ == "__main__":
