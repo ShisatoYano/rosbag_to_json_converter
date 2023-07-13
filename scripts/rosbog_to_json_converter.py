@@ -42,7 +42,6 @@ def _select_bag_files():
         print("Error: Please select a bag file")
         sys.exit()
     
-    print(files_list)
     return files_list
 
 
@@ -54,7 +53,6 @@ def _get_topics_list(files_list):
         print("Error: Any topics not found")
         sys.exit()
     
-    print(topics_list)
     return topics_list
 
 
