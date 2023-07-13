@@ -65,7 +65,33 @@ def _select_topics(app, topics_list):
     scroll_area.setWidgetResizable(True)
     scroll_area_widget_contents = QtWidgets.QWidget(scroll_area)
     scroll_area_widget_contents.setGeometry(QtCore.QRect(0, 0, 380, 247))
+    scroll_area.setWidget(scroll_area_widget_contents)
     
+    layout = QtWidgets.QGridLayout()
+    vertical_layout_scroll = QtWidgets.QVBoxLayout(scroll_area_widget_contents)
+    layout_index = 0
+
+    label = QtWidgets.QLabel("Select topics to convert json files")
+    layout.addWidget(label, layout_index, 0)
+    layout_index = layout_index + 1
+
+    check_boxes = []
+    for topic in topics_list:
+        check_box = QtWidgets.QCheckBox(topic)
+        vertical_layout_scroll.addWidget(check_box)
+        layout_index = layout_index + 1
+        check_boxes.append(check_box)
+    
+    layout.addWidget(scroll_area)
+    ok_button = QtWidgets.QPushButton("OK")
+    ok_button.clicked.connect(app.quit)
+    layout.addWidget(ok_button, layout_index, 0)
+    layout_index = layout_index + 1
+
+    window.setLayout(layout)
+    window.setWindowTitle("Select")
+    window.show()
+    app.exec_()
 
 
 def main():
