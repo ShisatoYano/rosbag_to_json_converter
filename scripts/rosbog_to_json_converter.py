@@ -3,6 +3,8 @@ import sys
 import rosbag
 import rospy
 import argparse
+import json
+import codecs
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 
@@ -110,15 +112,21 @@ def _get_selected_topics(selected_or_not, args):
         sys.exit()
 
 
-def _interpret_msg(msg, time, data_dict, parent_data_name=""):
+def _interpret_msg(topic, msg, time, data_dict, parent_data_name=""):
     try:
         for s in type(msg).__slots__:
             val = msg.__getattribute__(s)
             if not parent_data_name: data_name = s
             else: data_name = ".".join([parent_data_name, s])
-            _interpret_msg(val, time, data_dict, data_name)
+            _interpret_msg(topic, val, time, data_dict, data_name)
     except BaseException:
-        print(time, parent_data_name, msg)
+        if not parent_data_name in data_dict: data_dict.setdefault(parent_data_name, {})
+        data_dict[parent_data_name][time] = str(msg)
+
+
+def _default(o):
+    print(type(o))
+    raise TypeError(repr(o) + "is not JSON serializable")
 
 
 def _convert_bag_to_json(file, args):
@@ -135,17 +143,17 @@ def _convert_bag_to_json(file, args):
     data_dict = {}
     try:
         for topic, msg, ros_time in bag.read_messages(topics=args.topic_names):
-            print(topic)
-
             if not topic in data_dict: data_dict.setdefault(topic, {})
 
             unix_time = ros_time.to_time()
 
-            _interpret_msg(msg, unix_time, data_dict)
+            _interpret_msg(topic, msg, unix_time, data_dict[topic])
     except Exception as e:
         rospy.logwarn("Failed to read messages: %s", e)
     finally:
-        print(data_dict)
+        with open("data.json", 'w') as fw:
+            json.dump(data_dict, fw, ensure_ascii=False, indent=4, sort_keys=True)
+
         bag.close()
 
 
