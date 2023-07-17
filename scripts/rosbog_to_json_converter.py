@@ -4,8 +4,7 @@ import rosbag
 import rospy
 import argparse
 import json
-import codecs
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from datetime import datetime
 
 
@@ -146,8 +145,11 @@ def _convert_bag_to_json(file, args):
             if not topic in data_dict: data_dict.setdefault(topic, {})
 
             unix_time = ros_time.to_time()
+            datetime_str = datetime.fromtimestamp(unix_time).strftime(
+                "%Y-%m-%d-%H:%M:%S.%f"
+            )
 
-            _interpret_msg(topic, msg, unix_time, data_dict[topic])
+            _interpret_msg(topic, msg, datetime_str, data_dict[topic])
     except Exception as e:
         rospy.logwarn("Failed to read messages: %s", e)
     finally:
