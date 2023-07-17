@@ -123,11 +123,6 @@ def _interpret_msg(topic, msg, time, data_dict, parent_data_name=""):
         data_dict[parent_data_name][time] = str(msg)
 
 
-def _default(o):
-    print(type(o))
-    raise TypeError(repr(o) + "is not JSON serializable")
-
-
 def _convert_bag_to_json(file, args):
     # load bag file
     try:
