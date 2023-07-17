@@ -140,6 +140,7 @@ def _convert_bag_to_json(file, args):
     
     # read messages
     data_dict = {}
+    datetime_list = []
     try:
         for topic, msg, ros_time in bag.read_messages(topics=args.topic_names):
             if not topic in data_dict: data_dict.setdefault(topic, {})
@@ -148,11 +149,13 @@ def _convert_bag_to_json(file, args):
             datetime_str = datetime.fromtimestamp(unix_time).strftime(
                 "%Y-%m-%d-%H:%M:%S.%f"
             )
+            datetime_list.append(datetime_str)
 
             _interpret_msg(topic, msg, datetime_str, data_dict[topic])
     except Exception as e:
         rospy.logwarn("Failed to read messages: %s", e)
     finally:
+        data_dict["Datetime"] = datetime_list
         with open("data.json", 'w') as fw:
             json.dump(data_dict, fw, ensure_ascii=False, indent=4, sort_keys=True)
 
