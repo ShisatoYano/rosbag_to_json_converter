@@ -123,6 +123,16 @@ def _interpret_msg(topic, msg, time, data_dict, parent_data_name=""):
         data_dict[parent_data_name][time] = str(msg)
 
 
+def _format_json_file_name(file, args):
+    file_name = file[file.rfind('/'):-4]
+    
+    for topic in args.topic_names:
+        file_name = file_name + topic
+    json_file_name = args.output_file_format.replace("%t", file_name.replace('/', '-'))[1:]
+    
+    return json_file_name
+
+
 def _convert_bag_to_json(file, args):
     # load bag file
     try:
@@ -151,9 +161,8 @@ def _convert_bag_to_json(file, args):
         rospy.logwarn("Failed to read messages: %s", e)
     finally:
         data_dict["Datetime"] = datetime_list
-        with open("data.json", 'w') as fw:
+        with open(_format_json_file_name(file, args), 'w') as fw:
             json.dump(data_dict, fw, ensure_ascii=False, indent=4, sort_keys=True)
-
         bag.close()
 
 
