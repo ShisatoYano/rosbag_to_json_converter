@@ -127,7 +127,7 @@ def _format_json_file_name(file, args):
     file_name = file[file.rfind('/'):-4]
     
     for topic in args.topic_names:
-        file_name = file_name + topic
+        file_name = file_name + '_' + topic[1:]
     json_file_name = args.output_file_format.replace("%t", file_name.replace('/', '-'))[1:]
     
     return json_file_name
@@ -166,7 +166,7 @@ def _convert_bag_to_json(file, args):
     except Exception as e:
         rospy.logwarn("Failed to read messages: %s", e)
     finally:
-        data_dict["Datetime"] = datetime_list
+        data_dict["datetime"] = datetime_list
         with open(_format_json_file_name(file, args), 'w') as fw:
             json.dump(data_dict, fw, ensure_ascii=False, indent=4, sort_keys=True)
         bag.close()
