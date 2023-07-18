@@ -25,7 +25,7 @@ By executing the command with an option, -h or --help, you can see optional argu
 ![](images/optional_arguments.png)  
 
 ### 3. Select bag file from dialogue
-After you executed the above command, an dialogue to select a rosbag file will be displayed as follow. And then, select bag file and click "Open" button.  
+After you executed the above command, an dialog to select a rosbag file will be displayed as follow. And then, select bag file and click "Open" button.  
 ![](images/select_bag_file.png)  
 
 ### 4. Select topics to convert
@@ -39,3 +39,11 @@ You can selsect single or multiple topics. After that, please push "OK" button.
 After you selected topics and pushed "OK", this tool will start converting to json file and diplay the following message and loaded bag file in the terminal. Please wait for a while until finish converting.  
 ![](images/converting.png)  
 
+### 6. Finished conversion
+Finally, the following message dialog is displayed and conversion complete.  
+![](images/finished_conversion.png)  
+
+JSON file is generated in your current directory.  
+![](images/generated_json_file.png)  
+
+The file's name is defined as "(Loaded bag file's name)_(each selected topic name).json".  
