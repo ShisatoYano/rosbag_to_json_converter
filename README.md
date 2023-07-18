@@ -35,3 +35,7 @@ After you selected bag files, an GUI to select topics you want to convert will b
 You can selsect single or multiple topics. After that, please push "OK" button.  
 ![](images/checked_topics.png)  
 
+### 5. Wait for converting
+After you selected topics and pushed "OK", this tool will start converting to json file and diplay the following message and loaded bag file in the terminal. Please wait for a while until finish converting.  
+![](images/converting.png)  
+
