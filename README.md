@@ -14,3 +14,13 @@ $ cd ~/catkin_ws
 $ rosdep install -r --ignore-src --from-paths src
 $ catkin_make
 ```
+
+### 2. Start this tool's ROS node
+Execute this command.  
+```bash
+$ rosrun rosbag_to_json_converter rosbag_to_json_converter.py
+```
+
+By executing the command with an option, -h or --help, you can see optional arguments as follow.  
+![](images/optional_arguments.png)  
+
