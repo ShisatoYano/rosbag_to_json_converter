@@ -20,9 +20,9 @@ def _define_command_options():
     parser.add_argument("-t", "--topic", dest="topic_names", action="append",
                         help="list of topic names", metavar="TOPIC_NAME")
     parser.add_argument("-s", "--start-time", dest="start_time", type=float,
-                        help="start time you want to convert")
+                        help="start time[sec] you want to convert")
     parser.add_argument("-e", "--end-time", dest="end_time", type=float,
-                        help="end time you want to convert")
+                        help="end time[sec] you want to convert")
     
     return parser.parse_args()
 
@@ -137,6 +137,10 @@ def _convert_bag_to_json(file, args):
     # load bag file
     try:
         bag = rosbag.Bag(file)
+        start_ros_time = None
+        if args.start_time: start_ros_time = rospy.Time(args.start_time)
+        end_ros_time = None
+        if args.end_time: end_ros_time = rospy.Time(args.end_time)
     except Exception as e:
         rospy.logfatal("Failed to load bag file: %s", e)
         exit(1)
@@ -147,7 +151,9 @@ def _convert_bag_to_json(file, args):
     data_dict = {}
     datetime_list = []
     try:
-        for topic, msg, ros_time in bag.read_messages(topics=args.topic_names):
+        for topic, msg, ros_time in bag.read_messages(topics=args.topic_names,
+                                                      start_time=start_ros_time,
+                                                      end_time=end_ros_time):
             if not topic in data_dict: data_dict.setdefault(topic, {})
 
             unix_time = ros_time.to_time()
