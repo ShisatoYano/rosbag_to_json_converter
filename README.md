@@ -28,3 +28,10 @@ By executing the command with an option, -h or --help, you can see optional argu
 After you executed the above command, an dialogue to select a rosbag file will be displayed as follow. And then, select bag file and click "Open" button.  
 ![](images/select_bag_file.png)  
 
+### 4. Select topics to convert
+After you selected bag files, an GUI to select topics you want to convert will be displayed as follow.  
+![](images/select_topics.png)  
+
+You can selsect single or multiple topics. After that, please push "OK" button.  
+![](images/checked_topics.png)  
+
