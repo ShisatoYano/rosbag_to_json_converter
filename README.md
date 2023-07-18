@@ -24,3 +24,7 @@ $ rosrun rosbag_to_json_converter rosbag_to_json_converter.py
 By executing the command with an option, -h or --help, you can see optional arguments as follow.  
 ![](images/optional_arguments.png)  
 
+### 3. Select bag file from dialogue
+After you executed the above command, an dialogue to select a rosbag file will be displayed as follow. And then, select bag file and click "Open" button.  
+![](images/select_bag_file.png)  
+
